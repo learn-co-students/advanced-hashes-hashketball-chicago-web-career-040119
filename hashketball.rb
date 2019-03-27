@@ -5,20 +5,18 @@ def game_hash
   :home => {
     :team_name => "Brooklyn Nets",
     :colors => ["Black", "White"],
-    :players => [
-      {
-      :name => "Alan Anderson",
-      :number => 0,
-      :shoe => 16,
-      :points => 22,
-      :rebounds => 12,
-      :assists => 12,
-      :steals => 3,
-      :blocks => 1,
-      :slam_dunks => 1
-      },
-      {
-      :name => "Reggie Evans",
+    :players => {
+      "Alan Anderson" => {
+        :number => 0,
+        :shoe => 16,
+        :points => 22,
+        :rebounds => 12,
+        :assists => 12,
+        :steals => 3,
+        :blocks => 1,
+        :slam_dunks => 1
+        },
+    "Reggie Evans" => {
       :number => 30,
       :shoe => 14,
       :points => 12,
@@ -28,8 +26,7 @@ def game_hash
       :blocks => 12,
       :slam_dunks => 7
       },
-      {
-      :name => "Brook Lopez",
+    "Brook Lopez" => {
       :number => 11,
       :shoe => 17,
       :points => 17,
@@ -39,8 +36,7 @@ def game_hash
       :blocks => 1,
       :slam_dunks => 15
       },
-      {
-      :name => "Mason Plumlee",
+    "Mason Plumlee" => {
       :number => 1,
       :shoe => 19,
       :points => 26,
@@ -50,8 +46,7 @@ def game_hash
       :blocks => 8,
       :slam_dunks => 5
       },
-      {
-      :name => "Jason Terry",
+    "Jason Terry" => {
       :number => 31,
       :shoe => 15,
       :points => 19,
@@ -61,25 +56,23 @@ def game_hash
       :blocks => 11,
       :slam_dunks => 1
       }
-    ]
+    }
   },
   :away => {
     :team_name => "Charlotte Hornets",
     :colors => ["Turquoise", "Purple"],
-    :players => [
-      {
-      :name => "Jeff Adrien",
-      :number => 4,
-      :shoe => 18,
-      :points => 10,
-      :rebounds => 1,
-      :assists => 1,
-      :steals => 2,
-      :blocks => 7,
-      :slam_dunks => 2
+    :players => {
+      "Jeff Adrien" => {
+        :number => 4,
+        :shoe => 18,
+        :points => 10,
+        :rebounds => 1,
+        :assists => 1,
+        :steals => 2,
+        :blocks => 7,
+        :slam_dunks => 2
       },
-      {
-      :name => "Bismak Biyombo",
+    "Bismak Biyombo" => {
       :number => 0,
       :shoe => 16,
       :points => 12,
@@ -89,8 +82,7 @@ def game_hash
       :blocks => 15,
       :slam_dunks => 10
       },
-      {
-      :name => "DeSagna Diop",
+    "DeSagna Diop" => {
       :number => 2,
       :shoe => 14,
       :points => 24,
@@ -100,8 +92,7 @@ def game_hash
       :blocks => 5,
       :slam_dunks => 5
       },
-      {
-      :name => "Ben Gordon",
+    "Ben Gordon" => {
       :number => 8,
       :shoe => 15,
       :points => 33,
@@ -111,8 +102,7 @@ def game_hash
       :blocks => 1,
       :slam_dunks => 0
       },
-      {
-      :name => "Brendan Haywood",
+    "Brendan Haywood" => {
       :number => 33,
       :shoe => 15,
       :points => 6,
@@ -122,55 +112,49 @@ def game_hash
       :blocks => 5,
       :slam_dunks => 12
       }
-    ]
+    }
   }
 }
 end
 
 #returns the number of points scored for that player
 def num_points_scored (name)
-  points = nil
   game_hash.each do |team, details_hash|
-    players_array = details_hash[:players]
-      players_array.each do |player_details_hash|
-        if player_details_hash[:name] == name
-          points = player_details_hash[:points]
+    details_hash[:players].each do |player_name, player_details|
+        if player_name == name
+          return player_details[:points]
         end
       end
   end
-  points
 end
 
 #returns the shoe size for a given player
 def shoe_size(name)
-  shoe_size = nil
   game_hash.each do |team, details_hash|
-    players_array = details_hash[:players]
-    players_array.each do |player_details_hash|
-      if player_details_hash[:name] == name
-        shoe_size = player_details_hash[:shoe]
+    details_hash[:players].each do |player_name, player_details|
+      if player_name == name
+        return player_details[:shoe]
       end
     end
   end
-  shoe_size
 end
 
 #returns array of team colors
 def team_colors(team_name)
-  colors = nil
   game_hash.each do |team, details_hash|
     if details_hash[:team_name] == team_name
-      colors = details_hash[:colors].flatten
+      return details_hash[:colors].flatten
     end
   end
-  colors
 end
 
 #returns array of team names
 def team_names
-  game_hash.collect do |team, team_details|
-    team_details[:team_name]
-  end
+  array_team_names = []
+    game_hash.collect do |team, team_details|
+      array_team_names << team_details[:team_name]
+    end
+  array_team_names
 end
 
 #returns an array of the jersey number's for the team
@@ -178,60 +162,34 @@ def player_numbers(team_name)
   list_of_numbers = []
   game_hash.each do |team, team_details|
     if team_details[:team_name] == team_name
-      array_players = team_details[:players]
-      array_players.each do |player|
-      player.each do |key,value|
-        if key == :number
-          list_of_numbers << value
-        end
+      team_details[:players].each do |player_name, player_details|
+        list_of_numbers << player_details[:number]
       end
     end
   end
-end
-list_of_numbers
+  list_of_numbers
 end
 
 #returns the hash of a player's stats
-def player_stats(player_name)
-  player_stats = {}
+def player_stats(name)
   game_hash.each do |team, team_details|
-    team_details[:players].each do |stats|
-
-      if stats[:name] == player_name
-        stats.delete(:name)
-        player_stats = stats
+    team_details[:players].each do |player_name, player_details|
+      if player_name == name
+        return player_details
       end
     end
   end
-  player_stats
 end
 #returns the number of rebounds associated
 #with the player that has the largest shoe size.
 def big_shoe_rebounds
   size = 0
-  number_of_rebounds = 0
     game_hash.each do |team, team_details|
-      team_details[:players].each do |stats|
-        if stats[:shoe] > size
-          size = stats[:shoe]
-          number_of_rebounds = stats[:rebounds]
+      team_details[:players].each do |player_name, player_details|
+        if player_details[:shoe] > size
+          size = player_details[:shoe]
+          return player_details[:rebounds]
         end
       end
     end
-  number_of_rebounds
-end
-#Which player has the most points?
-def most_points_scored
-  most_points_scored = 0
-  player_with_most_points_scored = ""
-  game_hash.each do |home_or_away, details|
-    details[:players].each do |player|
-      points = player[:points]
-      if points > most_points_scored
-        most_points_scored = points
-        player_with_most_points_scored = player[:player_name]
-      end
-    end
-  end
-  player_with_most_points_scored
 end
