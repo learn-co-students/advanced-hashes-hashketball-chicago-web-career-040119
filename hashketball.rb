@@ -119,77 +119,46 @@ end
 
 #returns the number of points scored for that player
 def num_points_scored (name)
-  game_hash.each do |team, details_hash|
-    details_hash[:players].each do |player_name, player_details|
-        if player_name == name
-          return player_details[:points]
+  points = []
+  game_hash.each do |place, team|
+    team.each do |attribute, data|
+      if attribute == :players
+        data.each do |player_name, player_details|
+          if player_name == name
+            return player_details[:points]
+          end
         end
       end
+    end
   end
 end
 
 #returns the shoe size for a given player
 def shoe_size(name)
-  game_hash.each do |team, details_hash|
-    details_hash[:players].each do |player_name, player_details|
-      if player_name == name
-        return player_details[:shoe]
-      end
-    end
-  end
+
 end
 
 #returns array of team colors
 def team_colors(team_name)
-  game_hash.each do |team, details_hash|
-    if details_hash[:team_name] == team_name
-      return details_hash[:colors].flatten
-    end
-  end
+
 end
 
 #returns array of team names
 def team_names
-  array_team_names = []
-    game_hash.collect do |team, team_details|
-      array_team_names << team_details[:team_name]
-    end
-  array_team_names
+
 end
 
 #returns an array of the jersey number's for the team
 def player_numbers(team_name)
-  list_of_numbers = []
-  game_hash.each do |team, team_details|
-    if team_details[:team_name] == team_name
-      team_details[:players].each do |player_name, player_details|
-        list_of_numbers << player_details[:number]
-      end
-    end
-  end
-  list_of_numbers
+
 end
 
 #returns the hash of a player's stats
 def player_stats(name)
-  game_hash.each do |team, team_details|
-    team_details[:players].each do |player_name, player_details|
-      if player_name == name
-        return player_details
-      end
-    end
-  end
+
 end
 #returns the number of rebounds associated
 #with the player that has the largest shoe size.
 def big_shoe_rebounds
-  size = 0
-    game_hash.each do |team, team_details|
-      team_details[:players].each do |player_name, player_details|
-        if player_details[:shoe] > size
-          size = player_details[:shoe]
-          return player_details[:rebounds]
-        end
-      end
-    end
+
 end
